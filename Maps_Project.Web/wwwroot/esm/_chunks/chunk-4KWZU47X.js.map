@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["external-global:Slick"],
+  "sourcesContent": ["module.exports = Slick;"],
+  "mappings": "wCAAA,IAAAA,EAAAC,EAAA,CAAAC,EAAAC,IAAA,CAAAA,EAAO,QAAU",
+  "names": ["require_Slick", "__commonJSMin", "exports", "module"]
+}

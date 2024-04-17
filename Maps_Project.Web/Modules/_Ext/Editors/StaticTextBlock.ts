@@ -1,0 +1,72 @@
+import { coalesce, Culture, Decorators, formatDate, ISetEditValue, PropertyItem, Widget } from "@serenity-is/corelib"
+
+@Decorators.registerEditor('_Ext.StaticTextBlock', [ISetEditValue])
+@Decorators.element("<div/>")
+export class StaticTextBlock extends Widget<StaticTextBlockOptions>
+    implements ISetEditValue {
+
+    private _value: string;
+
+    constructor(container: JQuery, options: StaticTextBlockOptions) {
+        super(container, options);
+
+        // hide the caption label for this editor if in a form. ugly hack
+        if (this.options.hideLabel)
+            this.element.closest('.field').find('.caption').hide();
+
+        // remove required asterisk (*)
+        this.element.closest('.field').find('sup').hide();
+
+        this.updateElementContent();
+    }
+
+    private updateElementContent() {
+        var text = coalesce(this.options.text, this._value);
+
+        if (this.options.isDate)
+            text = formatDate(text);
+
+        if (this.options.isDateTime)
+            text = formatDate(text, Culture.dateTimeFormat);
+
+        // if isLocalText is set, text is actually a local text key
+        if (this.options.isLocalText)
+            text = text(text);
+
+        // don't html encode if isHtml option is true
+        if (this.options.isHtml)
+            this.element.html(text);
+        else
+            this.element.text(text);
+    }
+
+    /**
+     * By implementing ISetEditValue interface, we allow this editor to display its field value.
+     * But only do this when our text content is not explicitly set in options
+     */
+    public setEditValue(source: any, property: PropertyItem) {
+        if (this.options.text == null) {
+            this._value = coalesce(this.options.text, source[property.name]);
+            this.updateElementContent();
+        }
+    }
+
+    public get value() {
+        return this._value;
+    }
+
+    public set value(value) {
+        this._value = value;
+        this.updateElementContent();
+    }
+
+}
+
+export interface StaticTextBlockOptions {
+    text: string;
+    isHtml: boolean;
+    isLocalText: boolean;
+    hideLabel: boolean;
+    isDate: boolean;
+    isDateTime: boolean;
+}

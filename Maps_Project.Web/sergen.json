@@ -1,0 +1,9 @@
+{
+  "Extends": "defaults@6.6.0",
+  "EnableGenerateFields": true,
+  "RootNamespace": "Maps_Project",
+  "UpgradeInfo": {
+    "InitialType": "Premium",
+    "InitialVersion": "6.9.5.0"
+  }
+}
